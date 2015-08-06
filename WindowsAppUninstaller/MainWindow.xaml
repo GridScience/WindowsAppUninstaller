@@ -1,0 +1,82 @@
+﻿<Window x:Class="WindowsAppUninstaller.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WindowsAppUninstaller"
+        mc:Ignorable="d"
+        Title="Windows App Uninstaller" Height="480" Width="800"
+        WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow" ResizeMode="CanMinimize"
+        >
+    <Window.Resources>
+        <Style x:Key="CheckListBoxItemContainerStyle" TargetType="{x:Type ListBoxItem}">
+            <!--Set it un-focusable, becaues the CheckBox in it should be focusable and only it.-->
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <!--Content="{TemplateBinding Content}"-->
+                        <CheckBox Content="{Binding Path=Name}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                            IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}}"
+                            Background="{TemplateBinding Background}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+        <DataTemplate x:Key="GridViewLeftAlign">
+            <TextBlock Text="{Binding Path=Content}" TextAlignment="Left" />
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="120"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="120"/>
+                </Grid.RowDefinitions>
+                <ListBox Name="lstApps" Grid.Row="0" Margin="10"
+                         ItemContainerStyle="{StaticResource CheckListBoxItemContainerStyle}"
+                         SelectionMode="Extended">
+                </ListBox>
+                <ListView Name="lvProps" Grid.Row="1" Margin="10,0,10,0">
+                    <ListView.View>
+                        <GridView>
+                            <GridView.Columns>
+                                <GridViewColumn Header="属性" Width="Auto" CellTemplate="{StaticResource GridViewLeftAlign}" DisplayMemberBinding="{Binding Path=Key}"></GridViewColumn>
+                                <GridViewColumn Header="值" Width="Auto" CellTemplate="{StaticResource GridViewLeftAlign}" DisplayMemberBinding="{Binding Path=Value}"></GridViewColumn>
+                            </GridView.Columns>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" Name="btnGetApps" Margin="0,10,10,5">获取列表(_G)</Button>
+                <Button Grid.Row="1" Name="btnRemoveApp" Margin="0,5,10,10">删除 App(_R)</Button>
+            </Grid>
+        </Grid>
+        <StatusBar Grid.Row="1" Margin="10,5,10,5">
+            <StatusBarItem>
+                <TextBlock Name="statusText">
+                </TextBlock>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
